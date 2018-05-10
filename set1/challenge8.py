@@ -3,7 +3,7 @@
 from itertools import combinations
 
 
-def is_ecb_encrypted(data):
+def _is_ecb_encrypted(data):
     """
     Determines if the data is encrypted with ECB.
 
@@ -32,7 +32,7 @@ def main():
         for line in f:
             result = bytes.fromhex(line.strip())
 
-            if is_ecb_encrypted(result):
+            if _is_ecb_encrypted(result):
                 result = (i, line.strip())
                 break
             i += 1
