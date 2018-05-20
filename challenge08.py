@@ -3,7 +3,9 @@
 from itertools import combinations
 
 
-def _is_ecb_encrypted(data):
+from challenge06 import get_blocks
+
+def is_ecb_encrypted(data):
     """
     Determines if the data is encrypted with ECB.
 
@@ -12,9 +14,7 @@ def _is_ecb_encrypted(data):
     :returns: True if ECB encrypted
     :rtype: bool
     """
-    size = 16
-    blocks = [data[i:i+size] for i in range(0, len(data), size)]
-
+    blocks = get_blocks(data, 16)
     pairs = list(combinations(blocks, 2))
     dists = [p1 == p2 for p1, p2 in pairs]
 
@@ -32,7 +32,7 @@ def main():
         for line in f:
             result = bytes.fromhex(line.strip())
 
-            if _is_ecb_encrypted(result):
+            if is_ecb_encrypted(result):
                 result = (i, line.strip())
                 break
             i += 1

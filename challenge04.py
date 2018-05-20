@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Cryptopals Set 1 Challenge 4"""
-from challenge3 import decrypt_message
+from challenge03 import decrypt_message
 
 
 def _decrypt_line(line):
