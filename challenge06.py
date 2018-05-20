@@ -3,8 +3,8 @@
 import base64
 from itertools import combinations, zip_longest
 
-from challenge3 import decrypt_message
-from challenge5 import repeat_key_xor
+from challenge03 import decrypt_message
+from challenge05 import repeat_key_xor
 
 
 def _get_hamming_distance(x, y):
@@ -22,20 +22,6 @@ def _get_hamming_distance(x, y):
     return sum(bin(a ^ b).count('1') for a, b in zip(x, y))
 
 
-def _get_blocks(data, size):
-    """
-    Partitions the data into blocks based on the incoming size.
-
-    :param data: the data to partition
-    :param size: the size of the blocks
-    :type data: bytes
-    :type size: int
-    :returns: the blocks
-    :rtype: list
-    """
-    return [data[i:i+size] for i in range(0, len(data), size)]
-
-
 def _normalize_edit_distance(data, keysize):
     """
     Normalize the edit distances between the data blocks.
@@ -49,7 +35,7 @@ def _normalize_edit_distance(data, keysize):
     """
     # Break the data into key size blocks and take the first 4 as mentioned
     # in step 4 to use to average the distances
-    blocks = _get_blocks(data, keysize)[:4]
+    blocks = get_blocks(data, keysize)[:4]
 
     # Create combination pairs of 2 from the blocks
     pairs = list(combinations(blocks, 2))
@@ -70,7 +56,7 @@ def _break_repeat_key_xor(data, keysize):
     :returns: the key and the decrypted message
     :rtype: (str, str)
     """
-    blocks = _get_blocks(data, keysize)
+    blocks = get_blocks(data, keysize)
 
     # Converts blocks to ASCII code values
     transposed_blocks = list(zip_longest(*blocks, fillvalue=0))
@@ -78,6 +64,20 @@ def _break_repeat_key_xor(data, keysize):
     # Build the key from the decrypted blocks
     key = ''.join([decrypt_message(b)["key"] for b in transposed_blocks])
     return (key, repeat_key_xor(data, key))
+
+
+def get_blocks(data, size):
+    """
+    Partitions the data into blocks based on the incoming size.
+
+    :param data: the data to partition
+    :param size: the size of the blocks
+    :type data: bytes
+    :type size: int
+    :returns: the blocks
+    :rtype: list
+    """
+    return [data[i:i+size] for i in range(0, len(data), size)]
 
 
 def main():
